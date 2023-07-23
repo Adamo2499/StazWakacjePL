@@ -6,24 +6,29 @@ $birthDates = array();
 // Sprawdzenie czy plik istnieje
 if (!file_exists($csvFile)) die("Plik $csvFile nie istnieje!");
 
+// Otwarcie pliku w trybie do odczytu
 $file = fopen($csvFile, "r");
 
 // Sprawdzenie czy plik został poprawnie otwarty
 if (!$file) die("Nie udało się otworzyć pliku: $file!");
 
+// Przejście po każdej linijce w pliku
 while (($singleData = fgetcsv($file)) !== false) {
+    // Przypisanie wartości z linii do zmiennych
     $name = $singleData[0];
     $birthDate = $singleData[1];
     // Zamiana liter na małe (z uwzględnieniem polskich znaków diakrytycznych) i dołączenie do pierwszej litery (dużej z automatu)
     $clearName = $name[0] . mb_strtolower(substr($name, 1), 'UTF-8');
-    // Sprawdzenie czy imie występuje już w tablicy a jeżeli nie to ustawia jego licznik na 1
+    // Sprawdzenie czy imie występuje już w tablicy
     if (!isset($names[$clearName])) {
+        //  jeżeli nie to ustawia jego licznik na 1
         $names[$clearName] = 1;
     } else {
-        // Jeżeli imie istnieje to zwiększamy licznik o 1
+        // jeżeli tak to zwiększamy licznik
         $names[$clearName]++;
     }
     // Zadanie dodatkowe
+
     // Sprawdzenie czy osoba jest urodzona w lub po 1 stycznia 2000
     if ($birthDate >= "2000-01-01") {
         // Zamiana formatu daty z YYYY-MM-DD na DD.MM.YYYY
